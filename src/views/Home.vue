@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <div class="left">
+
       <div class="title-bar">
         <div class="text-center">
           文本形式的汇报
@@ -8,6 +9,7 @@
       </div>
 
       <div class="texture">
+
         <a-row class="search-bar">
           <a-col :span="2">
             <div class="div-center">
@@ -55,7 +57,7 @@
 
       </div>
       <div>
-        拖入文件
+        <FileDropZone></FileDropZone>
       </div>
       <div>
         拖入文件
@@ -71,13 +73,14 @@
 </template>
 
 <script>
+import FileDropZone from "@/components/FileDropZone";
 let list = Array(10).fill('')
 list = list.map(val => {
   return Math.ceil(100 * Math.random())
 })
 export default {
   name: 'Home',
-  components: {},
+  components: {FileDropZone},
   data() {
     return {
       list: list,
