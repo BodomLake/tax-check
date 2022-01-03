@@ -1,17 +1,16 @@
 <template>
   <div class="file">
-    <div class="dropZone" :for="id" @click="inputFile">
+    <div class="dropZone" :for="id" @click="inputFile" @dragleave="dragLeaveFile($event)"
+         @dragover="dragOverFile($event)" @drop="dropFile($event)">
       <!-- 可以考虑不用Antd 组件-->
-      <a-icon type="plus-circle" :spin="false" theme="outlined"
-              style="transform: translateY(-50%);top: 50%;position: relative;"/>
-      <input type="file" :id="id" :name="fileName || 'file:' + id" :ref="id" :multiple="multiple"
+      <!--<a-icon type="plus-circle" :spin="false" theme="outlined" style="transform: translateY(-50%);top: 50%;position: relative;"/>-->
+      <input type="file" :id="id" :name="'fileLoader:' + id" :ref="id" :multiple="multiple"
              style="visibility: hidden;display: none" @change="inputChange($event)">
     </div>
     <ul class="fileList">
       <li v-for="file in fileList">
         <a-icon type="file-excel"/>
         {{ file.name }}
-
       </li>
     </ul>
   </div>
@@ -20,7 +19,7 @@
 
 <script>
 import {v4 as uuidv4} from 'uuid';
-import * as XLSX from 'xlsx'
+
 // 默认接受 application/vnd.ms-excel
 export default {
   name: "FileDropZone",
@@ -40,20 +39,13 @@ export default {
         return uuidv4().replaceAll('-', '');
       }
     },
-    // 该组件中存放的文件列表
-    fileList: {
-      require: true,
-      type: Array,
-      default: () => {
-        return []
-      },
-    }
   },
+
   data() {
     return {
       tooltip: '请拖入文件',
-      fileName: '',
-      fileReader: new FileReader(),
+      // 该组件中存放的文件列表
+      fileList: [],
     }
   },
   mounted() {
@@ -64,24 +56,32 @@ export default {
       this.$refs[this.id].click()
     },
     inputChange($event) {
-      console.log($event)
-      console.log($event.target)
-      console.log($event.target.files)
-      this.fileList = $event.target.files;
-      console.log(XLSX)
-
-      // 读取完毕的回调
-      this.fileReader.onload = function (e) {
-        let data = e.target.result;
-        let workbook = XLSX.read(data, {type: 'binary'});
-        console.log(workbook);
-        let json1 = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]])
-        let json2 = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[1]])
-        console.log(json1)
-        console.log(json2)
+      // console.log($event.target)
+      console.log('点击传入文件', $event.target.files)
+      if (this.multiple) {
+        this.fileList.push($event.target.files[0])
+      } else {
+        this.fileList = $event.target.files;
       }
-      // 读取文件
-      this.fileReader.readAsBinaryString(this.fileList[0])
+    },
+    dropFile($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      let transferFiles = $event.target.files || $event.dataTransfer.files;
+      console.log('拖入文件', transferFiles)
+      if (this.multiple) {
+        this.fileList.push(transferFiles[0])
+      } else {
+        this.fileList = $event.target.files;
+      }
+    },
+    dragOverFile($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    },
+    dragLeaveFile($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
     }
   }
 }
@@ -89,20 +89,21 @@ export default {
 
 <style scoped>
 .file {
-  width: 50px;
-  height: 50px;
   margin: 0px auto;
 }
 
 .dropZone {
-  width: 100%;
-  height: 100%;
+  width: 50px;
+  height: 50px;
+  margin: 0px auto;
   background-color: burlywood;
   border-radius: 10px;
 }
 
 .fileList {
-
+  user-select: none;
+  height: fit-content;
+  width: 100%;
 }
 
 </style>
