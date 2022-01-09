@@ -9,8 +9,11 @@
     </div>
     <ul class="fileList">
       <li v-for="file in fileList">
-        <a-icon type="file-excel"/>
-        {{ file.name }}
+        <div class="item">
+          <a-icon type="file-excel"/>
+          {{ file.name }}
+          <!--<a-icon type="delete"/>-->
+        </div>
       </li>
     </ul>
   </div>
@@ -59,7 +62,9 @@ export default {
       // console.log($event.target)
       console.log('点击传入文件', $event.target.files)
       if (this.multiple) {
-        this.fileList.push($event.target.files[0])
+        Array.from($event.target.files).forEach(f => {
+          this.fileList.push(f)
+        })
       } else {
         this.fileList = $event.target.files;
       }
@@ -70,10 +75,20 @@ export default {
       let transferFiles = $event.target.files || $event.dataTransfer.files;
       console.log('拖入文件', transferFiles)
       if (this.multiple) {
-        this.fileList.push(transferFiles[0])
+        Array.from(transferFiles).forEach(f => {
+          this.fileList.push(f);
+        })
       } else {
+        if (transferFiles.length > 1) {
+          this.$message.info('不可以拖入多个文件')
+          return;
+        }
         this.fileList = $event.target.files;
       }
+    },
+    clearFileList() {
+      console.log('清空文件列表')
+
     },
     dragOverFile($event) {
       $event.preventDefault();
@@ -106,4 +121,11 @@ export default {
   width: 100%;
 }
 
+.item {
+  display: inline-block;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
 </style>

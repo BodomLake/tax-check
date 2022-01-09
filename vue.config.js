@@ -15,6 +15,7 @@ module.exports = {
           'primary-color': '#1DA57A',
           'link-color': '#ff0000',
           'border-radius-base': '2px',
+          'font-size': '12px',
         },
         javascriptEnabled: true
       },

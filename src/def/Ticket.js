@@ -1,44 +1,27 @@
-export class Ticket {
-
-  constructor() {
-
+export default class Ticket {
+  constructor(goodsName) {
+    this.goodsName = goodsName;
+    // 总计金额
+    this.money = 0;
+    // 总计数量
+    this.count = 0;
+    // 每一栏数据的来源
+    this.source = [];
   }
 
-  // 序号
-  serialNo;
-  // 发票代码
-  code;
-  // 发票号码
-  No;
-  // 开票日期
-  issueDate;
-  // 购买方名称
-  vendeeName;
-  // 购买方
-  vendeeId;
-  // 金额
-  money;
-  // 销售方名称
-  sellerName;
-  // 销售方识别号
-  sellerId;
-  // 货物名称
-  goodsName;
-  // 税额
-  tax;
-  // 税率
-  taxRatio;
-  // 单价
-  unitPrice;
-  // 数量
-  count;
-  // 单位
-  unit;
-  //税价合计
-  taxAndPrice
-  // 商品编码;
-  goodsCode;
-  // 发票状态
-  state;
+  addSource(src) {
+    this.source.push(src)
+    return this;
+  }
+
+  summary() {
+    this.source.forEach((src, index) => {
+      this.money += parseFloat(src.money)
+      this.count += parseFloat(src.count)
+    })
+    this.money = this.money.toFixed(2)
+    this.count = this.count.toFixed(2)
+    return this;
+  }
 
 }
