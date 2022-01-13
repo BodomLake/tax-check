@@ -3,7 +3,7 @@ import {v4 as uuidv4} from "uuid";
 export default class Union {
 
   constructor(key, goodsName, earnMoney, earnCount, offerMoney, offerCount) {
-    this.key = key || uuidv4(),
+    this.key = key || uuidv4();
     // 购进情况
     this.earnMoney = parseFloat(earnMoney) || 0;
     this.earnCount = parseFloat(earnCount) || 0;
@@ -21,8 +21,8 @@ export default class Union {
   }
 
   calcRest() {
-    this.restMoney = (this.earnMoney - this.offerMoney).toFixed(2);
-    this.restCount = (this.earnCount - this.offerCount).toFixed(2);
+    this.restMoney = parseFloat((this.earnMoney - this.offerMoney).toFixed(2))
+    this.restCount = parseFloat((this.earnCount - this.offerCount).toFixed(2))
     return this;
   }
 

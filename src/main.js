@@ -9,7 +9,7 @@ Vue.config.productionTip = false
  * Antd 按需引入
  */
 // import Button from 'ant-design-vue/lib/?????????????';
-import {Button, Row, Col, Input, List, Icon, Table} from 'ant-design-vue';
+import {Button, Row, Col, Input, List, Icon, Table, Checkbox} from 'ant-design-vue';
 
 Vue.component(Button.name, Button);
 Vue.component(Row.name, Row);
@@ -19,6 +19,7 @@ Vue.component(List.name, List);
 Vue.component(List.Item.name, List.Item);
 Vue.component(Table.name, Table);
 Vue.component(Icon.name, Icon);
+Vue.component(Checkbox.name, Checkbox);
 
 /* 引入Antd样式 */
 // import 'ant-design-vue/dist/antd.css';

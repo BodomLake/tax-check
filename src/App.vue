@@ -24,5 +24,6 @@ body {
   padding: 0px;
   height: 100vh;
   width: 100%;
+  font-weight: 500;
 }
 </style>

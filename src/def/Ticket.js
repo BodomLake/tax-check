@@ -1,5 +1,8 @@
-export default class Ticket {
+import Reactive from "./Reactive";
+
+export default class Ticket extends Reactive {
   constructor(goodsName) {
+    super();
     this.goodsName = goodsName;
     // 总计金额
     this.money = 0;
@@ -7,6 +10,14 @@ export default class Ticket {
     this.count = 0;
     // 每一栏数据的来源
     this.source = [];
+    this.defineReactive('source')
+    this.$watch = {
+      'source': (val, oldVal) => {
+        if (val != oldVal) {
+          this.summary()
+        }
+      }
+    }
   }
 
   addSource(src) {
@@ -16,12 +27,15 @@ export default class Ticket {
 
   summary() {
     this.source.forEach((src, index) => {
-      this.money += parseFloat(src.money)
-      this.count += parseFloat(src.count)
+      if (src.asMember) {
+        this.money += parseFloat(src.money)
+        this.count += parseFloat(src.count)
+      }
     })
     this.money = this.money.toFixed(2)
     this.count = this.count.toFixed(2)
     return this;
   }
+
 
 }
